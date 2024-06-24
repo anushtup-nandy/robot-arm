@@ -1,0 +1,38 @@
+cmake_minimum_required(VERSION 3.22.1)
+project(robot-arm)
+
+# find_package(Boost REQUIRED)
+
+set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS}")
+
+file(GLOB_RECURSE ALL_HDRS "./include/*.hpp" "./include/Eigen/*.h")
+file(GLOB_RECURSE ALL_SRCS "./source/*.cpp")
+
+include_directories(DIRECTORY
+  include/${PROJECT_NAME}
+  include
+)
+
+link_directories()
+
+# find_package(ortools CONFIG REQUIRED)
+
+add_library(${PROJECT_NAME} SHARED
+  ${ALL_SRCS}
+)
+
+set(test_cpp_dir "test/")
+set(test_cpp_files "")
+file(GLOB_RECURSE test_cpp_files "${test_cpp_dir}/*.cpp")
+foreach(test_cpp_file ${test_cpp_files})
+  get_filename_component(test_cpp_name ${test_cpp_file} NAME_WE)
+  #ADD_EXECUTABLE(${test_cpp_name} ${ALL_SRCS} ${test_cpp_dir}/${test_cpp_name}.cpp)
+  ADD_EXECUTABLE(${test_cpp_name} ${test_cpp_dir}/${test_cpp_name}.cpp)
+  TARGET_LINK_LIBRARIES(${test_cpp_name}
+    ${PROJECT_NAME}
+    # pthread ## this is for linux systems
+    m
+    pthread
+    dl
+  )
+endforeach(test_cpp_file ${test_cpp_files})
