@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS}")
 
 #find header and src files
 file(GLOB_RECURSE ALL_HDRS "./include/*.hpp" "./include/Eigen/*.h" "./include/glad/*.h" "./include/KHR/*.h")
-file(GLOB_RECURSE ALL_SRCS "./source/*.cpp")
+file(GLOB_RECURSE ALL_SRCS "./source/*.cpp" "./source/*.c")
 
 #glfw:
 find_package(OpenGL REQUIRED)
@@ -50,6 +50,8 @@ foreach(test_cpp_file ${test_cpp_files})
   TARGET_LINK_LIBRARIES(${test_cpp_name}
     ${PROJECT_NAME}
     # pthread ## this is for linux systems
+    glfw
+    OpenGL::GL
     m
     pthread
     dl
