@@ -3,23 +3,42 @@ project(robot-arm)
 
 # find_package(Boost REQUIRED)
 
+#set compiler flags
 set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS}")
 
-file(GLOB_RECURSE ALL_HDRS "./include/*.hpp" "./include/Eigen/*.h")
+#find header and src files
+file(GLOB_RECURSE ALL_HDRS "./include/*.hpp" "./include/Eigen/*.h" "./include/glad/*.h" "./include/KHR/*.h")
 file(GLOB_RECURSE ALL_SRCS "./source/*.cpp")
 
+#glfw:
+find_package(OpenGL REQUIRED)
+set( GLFW_BUILD_DOCS OFF CACHE BOOL  "GLFW lib only" )
+set( GLFW_INSTALL OFF CACHE BOOL  "GLFW lib only" )
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "GLFW lib only")
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "GLFW lib only")
+set( GLAD_GL "" )
+set(GLFW_BUILD_WAYLAND OFF CACHE BOOL "Build Wayland support" FORCE)
+set(GLFW_BUILD_X11 ON CACHE BOOL "Build X11 support" FORCE)
+
+#include directories
 include_directories(DIRECTORY
   include/${PROJECT_NAME}
   include
+  ./glfw-3.4/include
 )
 
-link_directories()
+add_subdirectory(./glfw-3.4)
+# TARGET_LINK_LIBRARIES(robot-arm glfw)
+# TARGET_LINK_LIBRARIES(robot-arm OpenGL::GL)
+option( GLFW-CMAKE-STARTER-USE-GLFW-GLAD "Use GLAD from GLFW" ON )
 
-# find_package(ortools CONFIG REQUIRED)
+link_directories()
 
 add_library(${PROJECT_NAME} SHARED
   ${ALL_SRCS}
 )
+
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw OpenGL::GL)
 
 set(test_cpp_dir "test/")
 set(test_cpp_files "")

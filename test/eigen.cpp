@@ -1,5 +1,7 @@
 #include <iostream>
 #include <Eigen/Dense>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 int main()
 {
