@@ -7,7 +7,7 @@ project(robot-arm)
 set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS}")
 
 #find header and src files
-file(GLOB_RECURSE ALL_HDRS "./include/*.hpp" "./include/Eigen/*.h" "./include/glad/*.h" "./include/KHR/*.h")
+file(GLOB_RECURSE ALL_HDRS "./include/*.hpp" "./include/*h"  "./include/Eigen/*.h" "./include/glad/*.h" "./include/KHR/*.h" "./inclued/glm/*.hpp")
 file(GLOB_RECURSE ALL_SRCS "./source/*.cpp" "./source/*.c")
 
 #glfw:
