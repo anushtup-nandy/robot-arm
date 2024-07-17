@@ -1,3 +1,5 @@
 #ignore all build files
 /build/
 /.vscode/
+/assimp/
+/glfw-3.4/

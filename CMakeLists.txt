@@ -7,7 +7,9 @@ project(robot-arm)
 set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS}")
 
 #find header and src files
-file(GLOB_RECURSE ALL_HDRS "./include/*.hpp" "./include/*h"  "./include/Eigen/*.h" "./include/glad/*.h" "./include/KHR/*.h" "./inclued/glm/*.hpp")
+file(GLOB_RECURSE ALL_HDRS "./include/*.hpp" "./include/*h" 
+                            "./include/Eigen/*.h" "./include/glad/*.h" 
+                            "./include/KHR/*.h" "./include/glm/*.hpp")
 file(GLOB_RECURSE ALL_SRCS "./source/*.cpp" "./source/*.c")
 
 #glfw:
@@ -20,14 +22,22 @@ set( GLAD_GL "" )
 set(GLFW_BUILD_WAYLAND OFF CACHE BOOL "Build Wayland support" FORCE)
 set(GLFW_BUILD_X11 ON CACHE BOOL "Build X11 support" FORCE)
 
+# assimp
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
+set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "Assimp build tests" FORCE)
+set(ASSIMP_INSTALL OFF CACHE BOOL "Assimp install" FORCE)
+set(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL "Postfix debugger injection" FORCE)
+
 #include directories
 include_directories(DIRECTORY
-  include/${PROJECT_NAME}
+  include/${PROJECT_NAME}  
   include
   ./glfw-3.4/include
+  ./assimp/include
 )
 
 add_subdirectory(./glfw-3.4)
+add_subdirectory(./assimp)
 # TARGET_LINK_LIBRARIES(robot-arm glfw)
 # TARGET_LINK_LIBRARIES(robot-arm OpenGL::GL)
 option( GLFW-CMAKE-STARTER-USE-GLFW-GLAD "Use GLAD from GLFW" ON )
@@ -38,7 +48,7 @@ add_library(${PROJECT_NAME} SHARED
   ${ALL_SRCS}
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw OpenGL::GL)
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw OpenGL::GL assimp)
 
 set(test_cpp_dir "test/")
 set(test_cpp_files "")
@@ -52,6 +62,7 @@ foreach(test_cpp_file ${test_cpp_files})
     # pthread ## this is for linux systems
     glfw
     OpenGL::GL
+    assimp
     m
     pthread
     dl
